@@ -14,10 +14,6 @@
 
 
 
-
-
-
-
 # 数据结构与算法前言
 
 ## 什么是数据结构与算法？
@@ -372,3 +368,6 @@ console.log(qp);
 ```
 
 ![image-20221026141145143](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026141145143.png)
+
+# 单向链表
+
