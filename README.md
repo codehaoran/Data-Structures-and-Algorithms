@@ -371,3 +371,156 @@ console.log(qp);
 
 # 单向链表
 
+## 链表的简介
+
+链表和数组一样，可以用于**存储一系列的元素**，但是链表和数组的**实现机制完全不同**。链表的每个元素由一个存储**元素本身的节点**和一个**指向下一个元素的引用**（有的语言称为指针或连接）组成。类似于火车头，火车头会连接一个节点，车厢（节点）载着乘客（数据），通过节点连接另一节车厢。
+
+
+
+![image-20221026145648527](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026145648527.png)
+
+![image-20221026145448123](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026145448123.png)
+
+**链表的优势：**
+
+- 链表中的元素在内存中**不必是连续的空间**，可以充分利用计算机的内存，实现灵活的**内存动态管理**
+- 链表不必在创建时就**确定大小**，并且大小可以**无限地延伸**下去
+- 链表在**插入和删除**数据时，**时间复杂度**可以达到O(1)，相对数组效率高很多
+
+**链表的缺点：**
+
+- 链表访问任何一个位置的元素时，都需要**从头开始访问**（无法跳过第一个元素访问任何一个元素）
+- 无法通过下标值直接访问元素，需要从头开始一个个访问，直到找到对应的元素
+- 虽然可以轻松地到达**下一个节点**，但是回到**前一个节点**是很难的
+
+**链表中的常见操作：**
+
+- append（element）：向链表尾部添加一个新的项
+- insert（position，element）：向链表的特定位置插入一个新的项
+- get（position）：获取对应位置的元素
+- indexOf（element）：返回元素在链表中的索引。如果链表中没有该元素就返回-1
+- update（position，element）：修改某个位置的元素
+- removeAt（position）：从链表的特定位置移除一项
+- remove（element）：从链表中移除一项
+- isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false
+- size（）：返回链表包含的元素个数，与数组的length属性类似
+- toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值
+
+## 封装单向链表
+
+### 1.创建类
+
+```js
+// 节点类
+class Node {
+    constructor(data) {
+        // 数据
+        this.data = data
+        // 指向下一个节点
+        this.next = null
+    }
+}
+// 封装链表类
+class LinkedList {
+    constructor() {
+        // 链表的头
+        this.head = null
+        // 记录链表的长度
+        this.length = 0
+    }
+}
+```
+
+### 2.append(element)
+
+向链表尾部追加数据可能有两种情况：
+
+- 链表本身为空，添加的数据是唯一节点，需要把head指向节点
+
+- 链表不为空，需要在链表最后面追加节点，并让链表最后一个节点指向此节点
+
+  **代码实现**
+
+```js
+append(data) {
+    // 1.创建新的节点
+    let newNode = new Node(data)
+    // 2.判断添加的是否是第一个节点
+    if (!this.length) {
+
+        this.head = newNode
+    } else {
+        // 2.2不是第一个节点
+        // 查出最后一个节点
+        let current = this.head
+        while (current.next) {
+            current = current.next
+        }
+        // 在最后的节点的next上添加节点
+        current.next = newNode
+    }
+    // 节点长度加一
+    this.length += 1
+}
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list);
+```
+
+![image-20221026161940743](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026161940743.png)
+
+### 3.insert（position，element）
+
+### 4.get（position）
+
+### 5.indexOf（element）
+
+### 6.update（position，element）
+
+### 7.removeAt（position）
+
+### 8.remove（element）
+
+### 9.sEmpty（）
+
+### 10.size（）
+
+### 11.toString（）
+
+**实现流程：**
+
+- 主要是获取每一个元素
+- 从head开始，遍历每一个节点，取出其中的data，拼接成字符串
+- 最终将字符串返回
+
+​	**代码实现：**
+
+```js
+     // 转换成字符串
+toString() {
+    // 1.定义变量
+    let current = this.head
+    let res = ''
+    // 2.循环每一个节点
+    while (current) {
+        res += current.data + ' '
+        current = current.next
+    }
+    return res
+}
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list.toString()); // tom-1 jack-2 city-3 
+```
+

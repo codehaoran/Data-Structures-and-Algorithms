@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>单向链表</title>
+</head>
+
+<body>
+  <script>
+    // 节点类
+    class Node {
+      constructor(data) {
+        // 数据
+        this.data = data
+        // 指向下一个节点
+        this.next = null
+      }
+    }
+    // 封装链表类
+    class LinkedList {
+      constructor() {
+        // 链表的头
+        this.head = null
+        // 记录链表的长度
+        this.length = 0
+      }
+      // 末尾添加一个节点
+      append(data) {
+        // 1.创建新的节点
+        let newNode = new Node(data)
+        // 2.判断添加的是否是第一个节点
+        if (!this.length) {
+          
+          this.head = newNode
+        } else {
+          // 2.2不是第一个节点
+          // 查出最后一个节点
+          let current = this.head
+          while (current.next) {
+            current = current.next
+          }
+          // 在最后的节点的next上添加节点
+          current.next = newNode
+        }
+        // 节点长度加一
+        this.length += 1
+      }
+      // 转换成字符串
+      toString() {
+        // 1.定义变量
+        let current = this.head
+        let res = ''
+        // 2.循环每一个节点
+        while (current) {
+          res += current.data + ' '
+          current = current.next
+        }
+        return res
+      }
+    }
+
+    // 测试
+    const list = new LinkedList()
+    list.append('tom-1')
+    list.append('jack-2')
+    list.append('city-3')
+    console.log(list);
+  </script>
+</body>
+
+</html>
