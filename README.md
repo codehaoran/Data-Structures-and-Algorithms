@@ -431,7 +431,7 @@ class LinkedList {
 }
 ```
 
-### 2.append(element)
+### 2.append(data)
 
 向链表尾部追加数据可能有两种情况：
 
@@ -477,17 +477,17 @@ console.log(list);
 
 ![image-20221026161940743](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026161940743.png)
 
-### 3.insert（position，element）
+### 3.insert（position，data）
 
 ### 4.get（position）
 
-### 5.indexOf（element）
+### 5.indexOf（data）
 
-### 6.update（position，element）
+### 6.update（position，data）
 
 ### 7.removeAt（position）
 
-### 8.remove（element）
+### 8.remove（data）
 
 ### 9.sEmpty（）
 
@@ -504,7 +504,7 @@ console.log(list);
 ​	**代码实现：**
 
 ```js
-     // 转换成字符串
+// 转换成字符串
 toString() {
     // 1.定义变量
     let current = this.head
