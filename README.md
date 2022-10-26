@@ -276,4 +276,79 @@ console.log(passGame([1,2,3,4,5], 2)); // 3
 优先级队列主要考虑的问题为：
 
 - 每个元素不再只是一个数据，还包含数据的优先级
-- 在添加数据过程中，根据优先级放入到正确位置；
+- 在添加数据过程中，根据优先级放入到正确位置
+
+**优先级队列封装：**
+
+```js
+class QueueElement {
+    constructor(element, priority) {
+        this.element = element
+        this.priority = priority
+    }
+}
+
+class PriorityQueue {
+    constructor() {
+        // 属性
+        this.items = []
+    }
+    enqueue(element, priority) {
+        // 1.创建QueueElement对象
+        let queueElement = new QueueElement(element, priority)
+
+        // 判断队列是否为空
+        if (!this.items.length) {
+            this.items.push(queueElement)
+        } else {
+            // 判断优先级是不是最小的，如果是最小的，那么就没必要去比较了
+            if (queueElement.priority >= this.items[this.items.length - 1].priority) {
+                this.items.push(queueElement)
+                return
+            }
+            // 比较优先级，插入
+            for (let i = 0; i < this.items.length; i++) {
+                if (queueElement.priority < this.items[i].priority) {
+                    this.items.splice(i, 0, queueElement)
+                    break
+                }
+            }
+        }
+    }
+    // 删除优先级最高的并返回
+    dequeue() {
+        return this.items.shift()
+    }
+    // 返回优先级最高的
+    front() {
+        return this.items[0]
+    }
+    // 队列是否为空
+    isEmpty() {
+        return this.items.length === 0
+    }
+    // 队列长度
+    size() {
+        return this.items.length
+    }
+    // 返回队列的字符串形态
+    toString() {
+        let res = ''
+        for (let i = 0; i < this.items.length; i++) {
+            res += this.items[i].element + ' '
+        }
+        return res
+    }
+}
+
+const qp = new PriorityQueue()
+
+// enqueue
+qp.enqueue('star', 10)
+qp.enqueue('tom', 11)
+qp.enqueue('jack', 2)
+qp.enqueue('gg', 22)
+console.log(qp);
+```
+
+![image-20221026141145143](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026141145143.png)
