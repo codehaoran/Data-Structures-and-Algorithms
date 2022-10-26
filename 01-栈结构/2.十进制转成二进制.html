@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>十进制转成二进制</title>
+</head>
+<body>
+  <script>
+     class Stack {
+      constructor() {
+        // 栈中的属性
+        this.items = []
+      }
+      // 栈的相关操作
+      push(el) {
+        //添加一个新元素到栈顶位置
+        this.items.push(el)
+      }
+      pop() {
+        // 移除栈顶的元素，同时返回被移除的元素
+        return this.items.pop()
+      }
+      peek() {
+        // 仅返回栈顶的元素
+        return this.items[this.items.length - 1] 
+      }
+      isEmpty() {
+        // 如果栈里没有任何元素就返回true，否则返回false
+        return this.isEmpty.length === 0
+      }
+      size() {
+        // 返回栈里的元素个数
+        return this.items.length
+      }
+      toString() {
+        // 将栈结构的内容以字符串的形式返回 
+        // 20 10 8 7 6 5 4 1
+        let res = ''
+        for (let i = 0; i < this.items.length; i++) {
+          res += this.items[i] + ' '
+        }
+        return res
+      }
+    }
+    // 函数：十进制转二进制
+    function dec2bin(decNumber) {
+      // 1.定义一个栈对象
+      let stack = new Stack()
+
+      // 2.循环操作
+      while (decNumber > 0) {
+        // 2.1.获取余数
+        stack.push(decNumber % 2)
+        // 2.2获取整除后的结果，作为下一次使用
+        decNumber = Math.floor(decNumber / 2)
+      }
+      // 3.从栈中取出0和1
+      stack.items.reverse()
+      return stack.toString()
+    }
+    console.log(dec2bin(100)) // 1 1 0 0 1 0 0 
+  </script>
+</body>
+</html>
