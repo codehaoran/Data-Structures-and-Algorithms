@@ -92,6 +92,58 @@
         // 4.length+1
         this.length += 1
       }
+      // 获取对应位置的元素
+      get(position) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return null
+        // 2.根据position获取对应的数据
+        let current = this.head
+        let index = 0
+        while (current) {
+          if (index === position) {
+            return current.data
+          }
+          current = current.next
+          index++
+        }
+      }
+      // 返回数据在链表中的索引，如果没有，则返回-1
+      indexOf(data) {
+        // 定义变量
+        let index = 0
+        let current = this.head
+        // 开始查找
+        while (current) {
+          // 每次循环判断data是否相等
+          if (data === current.data) {
+            return index
+          }
+          // 不相等就current等于本身的next，准备下次循环使用
+          current = current.next
+          // 没循环一次 下标要+1
+          index += 1
+        }
+        // 循环完毕，没有找到相等的data
+        return -1
+      }
+      // 修改某个位置的元素
+      update(position, newData) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 2.根据position坐标获取要修改的数据
+        let current = this.head
+        let index = 0
+        while (current) {
+          // 2.1坐标相同，修改数据
+          if (index === position) {
+            current.data = newData
+            return true
+          }
+          // 2.2不相同，为下次循环做数据准备
+          current = current.next
+          index += 1
+        }
+      }
     }
 
     // 测试

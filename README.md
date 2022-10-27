@@ -372,8 +372,6 @@ console.log(qp);
 
 ![image-20221026145648527](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026145648527.png)
 
-![image-20221026145448123](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026145448123.png)
-
 **链表的优势：**
 
 - 链表中的元素在内存中**不必是连续的空间**，可以充分利用计算机的内存，实现灵活的**内存动态管理**
@@ -388,13 +386,13 @@ console.log(qp);
 
 **链表中的常见操作：**
 
-- append（element）：向链表尾部添加一个新的项
-- insert（position，element）：向链表的特定位置插入一个新的项
+- append（data）：向链表尾部添加一个新的项
+- insert（position，data）：向链表的特定位置插入一个新的项
 - get（position）：获取对应位置的元素
-- indexOf（element）：返回元素在链表中的索引。如果链表中没有该元素就返回-1
-- update（position，element）：修改某个位置的元素
+- indexOf（data）：返回元素在链表中的索引。如果链表中没有该元素就返回-1
+- update（position，data）：修改某个位置的元素
 - removeAt（position）：从链表的特定位置移除一项
-- remove（element）：从链表中移除一项
+- remove（data）：从链表中移除一项
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false
 - size（）：返回链表包含的元素个数，与数组的length属性类似
 - toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值
@@ -522,13 +520,124 @@ inster(position, data) {
 }
 ```
 
+**测试**
 
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+list.inster(2, 'test')
+console.log(list);
+```
+
+![image-20221027140307277](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027140307277.png)
 
 ### 4.get（position）
 
+```js
+// 获取对应位置的元素
+get(position) {
+    // 1.越界判断
+    if(position < 0 || position > this.length - 1) return null
+    // 2.根据position获取对应的数据
+    let current = this.head
+    let index = 0
+    while (current) {
+        if (index === position) {
+            return current.data
+        }
+        current = current.next
+        index++
+    }
+}
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list.get(1)); // 结果：jack-2
+```
+
 ### 5.indexOf（data）
 
+```js
+// 返回数据在链表中的索引，如果没有，则返回-1
+indexOf(data) {
+    // 定义变量
+    let index = 0
+    let current = this.head
+    // 开始查找
+    while (current) {
+        // 每次循环判断data是否相等
+        if (data === current.data) {
+            return index
+        }
+        // 不相等就current等于本身的next，准备下次循环使用
+        current = current.next
+        // 没循环一次 下标要+1
+        index += 1
+    }
+    // 循环完毕，没有找到相等的data
+    return -1
+}
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+list.indexOf('tom-1')
+console.log(list.indexOf(1)); // 结果：-1
+console.log(list.indexOf('tom-1')); // 结果： 0
+console.log(list.indexOf('city-3')); // 结果： 2
+```
+
 ### 6.update（position，data）
+
+```js
+// 修改某个位置的元素
+update(position, newData) {
+    // 1.越界判断
+    if (position < 0 || position > this.length - 1) return false
+    // 2.根据position坐标获取要修改的数据
+    let current = this.head
+    let index = 0
+    while (current) {
+        // 2.1坐标相同，修改数据
+        if (index === position) {
+            current.data = newData
+            return true
+        }
+        // 2.2不相同，为下次循环做数据准备
+        current = current.next
+        index += 1
+    }
+}
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list);
+```
+
+![image-20221027145713088](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027145713088.png)
 
 ### 7.removeAt（position）
 
