@@ -387,12 +387,12 @@ console.log(qp);
 **链表中的常见操作：**
 
 - append（data）：向链表尾部添加一个新的项
-- insert（position，data）：向链表的特定位置插入一个新的项
+- insert（position，data）：向链表的特定位置插入一个新的项，返回值为Boolean
 - get（position）：获取对应位置的元素
 - indexOf（data）：返回元素在链表中的索引。如果链表中没有该元素就返回-1
-- update（position，data）：修改某个位置的元素
-- removeAt（position）：从链表的特定位置移除一项
-- remove（data）：从链表中移除一项
+- update（position，data）：修改某个位置的元素，返回值为Boolean
+- removeAt（position）：从链表的特定位置移除一项，返回值为被移除的数据
+- remove（data）：从链表中移除一项，返回值为Boolean
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false
 - size（）：返回链表包含的元素个数，与数组的length属性类似
 - toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值
@@ -517,6 +517,7 @@ inster(position, data) {
     }
     // 4.length+1
     this.length += 1
+    return true
 }
 ```
 
@@ -641,11 +642,93 @@ console.log(list);
 
 ### 7.removeAt（position）
 
+```js
+// 删除链表中指定位置的数据
+removeAt(position) {
+    // 1.越界判断
+    if (position < 0 || position > this.length - 1) return null
+    // 2.声明需要的变量
+    let index = 0
+    let current = this.head
+    let preNode = null // 当前节点的上一个
+    // 3.有两种情况，一种是position等于0,
+    if (position === 0) {
+        current = this.head
+        this.head = this.head.next
+    } else {
+        // 第二种情况是position不等于0
+        while (current) {
+            // 坐标相同
+            if (index === position) {
+                // 上一个坐标的next等于当前坐标的next，即跳过了当前节点的data
+                preNode.next = current.next
+                break
+            }
+            // 记录当前节点的上一个
+            preNode = current
+            current = current.next
+            index += 1
+        }
+    }
+    // 4.链表长度更新
+    this.length -= 1
+    return current.data
+}
+
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list);
+```
+
+![image-20221027153714807](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027153714807.png)
+
 ### 8.remove（data）
+
+```js
+remove(data) {
+    // 1.通过数据获取坐标，使用封装过的indexOf方法
+    let index = this.indexOf(data)
+    // 2.通过坐标删除链表中的数据，使用已经封装过的removeAt方法
+    return !!this.removeAt(index) // !! 转换成布尔型
+}
+```
+
+**测试**
+
+```js
+// 测试
+const list = new LinkedList()
+list.append('tom-1')
+list.append('jack-2')
+list.append('city-3')
+console.log(list.remove('jack-2'));
+```
+
+![image-20221027155537253](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027155537253.png)
 
 ### 9.sEmpty（）
 
+```js
+isEmpty() {
+    return !!this.length
+}
+```
+
 ### 10.size（）
+
+```js
+size() {
+    return this.length
+}
+```
 
 ### 11.toString（）
 
@@ -676,5 +759,194 @@ list.append('tom-1')
 list.append('jack-2')
 list.append('city-3')
 console.log(list.toString()); // tom-1 jack-2 city-3 
+```
+
+### 整体代码
+
+```js
+// 节点类
+class Node {
+    constructor(data) {
+        // 数据
+        this.data = data
+        // 指向下一个节点
+        this.next = null
+    }
+}
+// 封装链表类
+class LinkedList {
+    constructor() {
+        // 链表的头
+        this.head = null
+        // 记录链表的长度
+        this.length = 0
+    }
+    // 末尾添加一个节点
+    append(data) {
+        // 1.创建新的节点
+        let newNode = new Node(data)
+        // 2.判断添加的是否是第一个节点
+        if (!this.length) {
+            this.head = newNode
+        } else {
+            // 2.2不是第一个节点
+            // 查出最后一个节点
+            let current = this.head
+            while (current.next) {
+                current = current.next
+            }
+            // 在最后的节点的next上添加节点
+            current.next = newNode
+        }
+        // 节点长度加一
+        this.length += 1
+    }
+    // 转换成字符串
+    toString() {
+        // 1.定义变量
+        let current = this.head
+        let res = ''
+        // 2.循环每一个节点
+        while (current) {
+            res += current.data + ' '
+            current = current.next
+        }
+        return res
+    }
+    // 指定位置插入数据
+    inster(position, data) {
+        // 1.对position进行越界判断
+        if (position < 0 || position > this.length) return false
+
+        // 2.根据data创建Node
+        let newNode = new Node(data)
+
+        // 3.插入newNode
+        // 插入数据有两种情况
+        // 第一种是position是0，插在head后
+        if (position === 0) {
+            newNode.next = this.head
+            this.head = newNode
+        } else {
+            // 第二种情况是position>0
+            let index = 0
+            let current = this.head
+            let preNode = null // 存放要插入位置的上一个
+            while (current) {
+                preNode = current
+                current = current.next
+                index++
+                if (index === position) {
+                    newNode.next = current
+                    preNode.next = newNode
+                    break
+                }
+            }
+        }
+        // 4.length+1
+        this.length += 1
+        return true
+    }
+    // 获取对应位置的元素
+    get(position) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return null
+        // 2.根据position获取对应的数据
+        let current = this.head
+        let index = 0
+        while (current) {
+            if (index === position) {
+                return current.data
+            }
+            current = current.next
+            index++
+        }
+    }
+    // 返回数据在链表中的索引，如果没有，则返回-1
+    indexOf(data) {
+        // 定义变量
+        let index = 0
+        let current = this.head
+        // 开始查找
+        while (current) {
+            // 每次循环判断data是否相等
+            if (data === current.data) {
+                return index
+            }
+            // 不相等就current等于本身的next，准备下次循环使用
+            current = current.next
+            // 没循环一次 下标要+1
+            index += 1
+        }
+        // 循环完毕，没有找到相等的data
+        return -1
+    }
+    // 修改某个位置的元素
+    update(position, newData) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 2.根据position坐标获取要修改的数据
+        let current = this.head
+        let index = 0
+        while (current) {
+            // 2.1坐标相同，修改数据
+            if (index === position) {
+                current.data = newData
+                return true
+            }
+            // 2.2不相同，为下次循环做数据准备
+            current = current.next
+            index += 1
+        }
+    }
+    // 删除链表中指定位置的数据
+    removeAt(position) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return null
+        // 2.声明需要的变量
+        let index = 0
+        let current = this.head
+        let preNode = null // 当前节点的上一个
+        // 3.有两种情况，一种是position等于0,
+        if (position === 0) {
+            current = this.head
+            this.head = this.head.next
+        } else {
+            // 第二种情况是position不等于0
+            while (current) {
+                // 坐标相同
+                if (index === position) {
+                    // 上一个坐标的next等于当前坐标的next，即跳过了当前节点的data
+                    preNode.next = current.next
+                    break
+                }
+                // 记录当前节点的上一个
+                preNode = current
+                current = current.next
+                index += 1
+            }
+        }
+        // 4.链表长度更新
+        this.length -= 1
+        return current.data
+    }
+
+    // 从链表中移除指定值
+    remove(data) {
+        // 1.通过数据获取坐标，使用封装过的indexOf方法
+        let index = this.indexOf(data)
+        // 2.通过坐标删除链表中的数据，使用已经封装过的removeAt方法
+        return !!this.removeAt(index)
+
+    }
+    // 判断链表有没有数据
+    isEmpty() {
+        return !!this.length
+    }
+    // 返回链表的长度
+    size() {
+        return this.length
+    }
+}
 ```
 

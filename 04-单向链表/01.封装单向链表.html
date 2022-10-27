@@ -91,6 +91,7 @@
         }
         // 4.length+1
         this.length += 1
+        return true
       }
       // 获取对应位置的元素
       get(position) {
@@ -144,14 +145,55 @@
           index += 1
         }
       }
-    }
+      // 删除链表中指定位置的数据
+      removeAt(position) {
+        // 1.越界判断
+        if (position < 0 || position > this.length - 1) return null
+        // 2.声明需要的变量
+        let index = 0
+        let current = this.head
+        let preNode = null // 当前节点的上一个
+        // 3.有两种情况，一种是position等于0,
+        if (position === 0) {
+          current = this.head
+          this.head = this.head.next
+        } else {
+          // 第二种情况是position不等于0
+          while (current) {
+            // 坐标相同
+            if (index === position) {
+              // 上一个坐标的next等于当前坐标的next，即跳过了当前节点的data
+              preNode.next = current.next
+              break
+            }
+            // 记录当前节点的上一个
+            preNode = current
+            current = current.next
+            index += 1
+          }
+        }
+        // 4.链表长度更新
+        this.length -= 1
+        return current.data
+      }
 
-    // 测试
-    const list = new LinkedList()
-    list.append('tom-1')
-    list.append('jack-2')
-    list.append('city-3')
-    console.log(list);
+      // 从链表中移除指定值
+      remove(data) {
+        // 1.通过数据获取坐标，使用封装过的indexOf方法
+        let index = this.indexOf(data)
+        // 2.通过坐标删除链表中的数据，使用已经封装过的removeAt方法
+        return !!this.removeAt(index)
+        
+      }
+      // 判断链表有没有数据
+      isEmpty() {
+        return !!this.length
+      }
+      // 返回链表的长度
+      size() {
+        return this.length
+      }
+    }
   </script>
 </body>
 
