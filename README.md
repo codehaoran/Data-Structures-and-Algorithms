@@ -4,6 +4,7 @@
 - [栈结构(Stack)](#栈结构(Stack))
 - [队列结构(Queue)](#队列结构(Queue))
 - [单向链表](#单向链表)
+- [双向链表](#双向链表)
 
 
 
@@ -399,7 +400,7 @@ console.log(qp);
 
 ## 封装单向链表
 
-### 1.创建类
+### 封装类
 
 ```js
 // 节点类
@@ -422,7 +423,7 @@ class LinkedList {
 }
 ```
 
-### 2.append(data)
+### 1.append(data)
 
 向链表尾部追加数据可能有两种情况：
 
@@ -468,7 +469,7 @@ console.log(list);
 
 ![image-20221026161940743](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026161940743.png)
 
-### 3.insert（position，data）
+### 2.insert（position，data）
 
 ![image-20221027103825934](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027103825934.png)
 
@@ -535,7 +536,7 @@ console.log(list);
 
 ![image-20221027140307277](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027140307277.png)
 
-### 4.get（position）
+### 3.get（position）
 
 ```js
 // 获取对应位置的元素
@@ -566,7 +567,7 @@ list.append('city-3')
 console.log(list.get(1)); // 结果：jack-2
 ```
 
-### 5.indexOf（data）
+### 4.indexOf（data）
 
 ```js
 // 返回数据在链表中的索引，如果没有，则返回-1
@@ -604,7 +605,7 @@ console.log(list.indexOf('tom-1')); // 结果： 0
 console.log(list.indexOf('city-3')); // 结果： 2
 ```
 
-### 6.update（position，data）
+### 5.update（position，data）
 
 ```js
 // 修改某个位置的元素
@@ -640,7 +641,7 @@ console.log(list);
 
 ![image-20221027145713088](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027145713088.png)
 
-### 7.removeAt（position）
+### 6.removeAt（position）
 
 ```js
 // 删除链表中指定位置的数据
@@ -690,7 +691,7 @@ console.log(list);
 
 ![image-20221027153714807](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027153714807.png)
 
-### 8.remove（data）
+### 7.remove（data）
 
 ```js
 remove(data) {
@@ -714,7 +715,7 @@ console.log(list.remove('jack-2'));
 
 ![image-20221027155537253](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027155537253.png)
 
-### 9.sEmpty（）
+### 8.sEmpty（）
 
 ```js
 isEmpty() {
@@ -722,7 +723,7 @@ isEmpty() {
 }
 ```
 
-### 10.size（）
+### 9.size（）
 
 ```js
 size() {
@@ -730,7 +731,7 @@ size() {
 }
 ```
 
-### 11.toString（）
+### 10.toString（）
 
 **实现流程：**
 
@@ -946,6 +947,67 @@ class LinkedList {
     // 返回链表的长度
     size() {
         return this.length
+    }
+}
+```
+
+# 双向链表
+
+## 双向链表简介
+
+双向链表：既可以从头遍历到尾，又可以从尾遍历到头。也就是说链表连接的过程是双向的。实现原理是：一个节点既有向前连接的引用，也有一个向后连接的引用。
+
+**双向链表的缺点：**
+
+- 每次在**插入或删除**某个节点时，都需要处理四个引用，而不是两个，实现起来会困难些；
+- 相对于单向链表，所占**内存空间更大**一些；
+- 但是，相对于双向链表的便利性而言，这些缺点微不足道。
+
+**双向链表的结构：**
+
+![image-20221027193049052](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027193049052.png)
+
+![image-20221027193350257](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027193350257.png)
+
+- 双向链表不仅有**head**指针指向第一个节点，而且有**tail**指针指向最后一个节点；
+- 每一个节点由三部分组成：**item**储存数据、**prev**指向前一个节点、**next**指向后一个节点；
+- 双向链表的第一个节点的prev指向**null**；
+- 双向链表的最后一个节点的next指向**null**；
+
+**双向链表常见的操作（方法）：**
+
+- append（element）：向链表尾部添加一个新的项；
+- inset（position，element）：向链表的特定位置插入一个新的项；
+- get（element）：获取对应位置的元素；
+- indexOf（element）：返回元素在链表中的索引，如果链表中没有元素就返回-1；
+- update（position，element）：修改某个位置的元素；
+- removeAt（position）：从链表的特定位置移除一项；
+- isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false；
+- size（）：返回链表包含的元素个数，与数组的length属性类似；
+- toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值；
+- forwardString（）：返回正向遍历节点字符串形式；
+- backwordString（）：返回反向遍历的节点的字符串形式；
+
+## 封装双向链表
+
+### 封装类
+
+```js
+// 节点类
+class Node {
+    constructor(data) {
+        this.data = data
+        this.prev = null
+        this.next = null
+    }
+}
+// 封装双向链表类
+class DoubleLinkList {
+    constructor() {
+        // 属性
+        this.head = null
+        this.tail = null
+        this.length = 0
     }
 }
 ```
