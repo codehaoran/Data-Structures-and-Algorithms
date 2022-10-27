@@ -63,8 +63,34 @@
       inster(position, data) {
         // 1.对position进行越界判断
         if (position < 0 || position > this.length) return false
-        // 根据data创建Node
+
+        // 2.根据data创建Node
         let newNode = new Node(data)
+
+        // 3.插入newNode
+        // 插入数据有两种情况
+        // 第一种是position是0，插在head后
+        if (position === 0) {
+          newNode.next = this.head
+          this.head = newNode
+        } else {
+          // 第二种情况是position>0
+          let index = 0
+          let current = this.head
+          let preNode = null // 存放要插入位置的上一个
+          while (current) {
+            preNode = current
+            current = current.next
+            index++
+            if (index === position) {
+              newNode.next = current
+              preNode.next = newNode
+              break
+            }
+          }
+        }
+        // 4.length+1
+        this.length += 1
       }
     }
 
