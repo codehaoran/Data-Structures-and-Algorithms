@@ -1,16 +1,9 @@
 # 目录
 
 - [数据结构与算法前言](#数据结构与算法前言)
-  - [什么是数据结构与算法？](#什么是数据结构与算法？)
-  - [常见的数据结构](#常见的数据结构)
-  - [什么是算法?](#什么是算法？)
 - [栈结构(Stack)](#栈结构(Stack))
-  - [栈结构的代码实现](#栈结构的代码实现)
-  - [栈的练习：](#栈的练习：)
 - [队列结构(Queue)](#队列结构(Queue))
-  - [代码封装实现](#代码封装实现)
-  - [队列应用](#队列应用)
-  - [优先级队列](#优先级队列)
+- [单向链表](#单向链表)
 
 
 
@@ -478,6 +471,58 @@ console.log(list);
 ![image-20221026161940743](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221026161940743.png)
 
 ### 3.insert（position，data）
+
+![image-20221027103825934](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027103825934.png)
+
+**插入一条数据有三种可能发生情况**
+
+1. **position大于链表长度或者为负数**
+   - return false
+2. **position = 0**
+   - 插在head后面
+   - ![image-20221027103836935](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027103836935.png)
+3. **position > 0**
+   - previous和current分别指向需要插入位置前一个节点和要插入的节点
+   - newNode的next指向current ，previous的next指向newNode
+   - ![image-20221027103921335](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221027103921335.png)
+
+```js
+// 指定位置插入数据
+inster(position, data) {
+    // 1.对position进行越界判断
+    if (position < 0 || position > this.length) return false
+
+    // 2.根据data创建Node
+    let newNode = new Node(data)
+
+    // 3.插入newNode
+    // 插入数据有两种情况
+    // 第一种是position是0，插在head后
+    if (position === 0) {
+        newNode.next = this.head
+        this.head = newNode
+    } else {
+        // 第二种情况是position>0
+        let index = 0
+        let current = this.head
+        let preNode = null // 存放要插入位置的上一个
+        while (current) {
+            preNode = current
+            current = current.next
+            index++
+            if (index === position) {
+                newNode.next = current
+                preNode.next = newNode
+                break
+            }
+        }
+    }
+    // 4.length+1
+    this.length += 1
+}
+```
+
+
 
 ### 4.get（position）
 
