@@ -26,7 +26,54 @@
         this.tail = null
         this.length = 0
       }
+      // 尾部添加一个节点
+      append(data) {
+        // 1.创建节点
+        const newNode = new Node(data)
+        // 2.判断添加的是否是第一个节点
+        if (!this.length) {
+          // 是第一个节点
+          this.head = newNode
+          this.tail = newNode
+        } else {
+          // 先将新节点的prev指向tail(最后一个节点)
+          newNode.prev = this.tail
+          // 再将tail(最后一个节点)的next指向新节点
+          this.tail.next = newNode
+          // 将最后一个节点设置成新节点
+          this.tail = newNode
+        }
+        // 3.长度+1
+        this.length += 1
+      }
+      // 返回正向遍历节点字符串形式
+      forwardString() {
+        let res = ''
+        let current = this.head
+        while (current) {
+          res += current.data + ' '
+          current = current.next
+        }
+        return res
+      }
+      // 返回反向遍历的节点的字符串形式
+      backwordString() {
+        let res = ''
+        let current = this.tail
+        while (current) {
+          res += current.data + ' '
+          current = current.prev
+        }
+        return res
+      }
     }
+    const dbList = new DoubleLinkList()
+    dbList.append('aaa')
+    dbList.append('bbb')
+    dbList.append('ccc')
+    console.log(dbList);
+    console.log(dbList.forwardString());
+    console.log(dbList.backwordString());
   </script>
 </body>
 

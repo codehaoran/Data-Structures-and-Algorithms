@@ -955,7 +955,7 @@ class LinkedList {
 
 ## 双向链表简介
 
-双向链表：既可以从头遍历到尾，又可以从尾遍历到头。也就是说链表连接的过程是双向的。实现原理是：一个节点既有向前连接的引用，也有一个向后连接的引用。
+链表有多种不同的类型，本节介绍双向链表。双向链表和普通链表的区别在于，在链表中， 一个节点只有链向下一个节点的链接；而在双向链表中，链接是双向的：一个链向下一个元素， 另一个链向前一个元素
 
 **双向链表的缺点：**
 
@@ -976,11 +976,11 @@ class LinkedList {
 
 **双向链表常见的操作（方法）：**
 
-- append（element）：向链表尾部添加一个新的项；
-- inset（position，element）：向链表的特定位置插入一个新的项；
-- get（element）：获取对应位置的元素；
-- indexOf（element）：返回元素在链表中的索引，如果链表中没有元素就返回-1；
-- update（position，element）：修改某个位置的元素；
+- append（data）：向链表尾部添加一个新的项；
+- inset（position，data）：向链表的特定位置插入一个新的项；
+- get（data）：获取对应位置的元素；
+- indexOf（data）：返回元素在链表中的索引，如果链表中没有元素就返回-1；
+- update（position，data）：修改某个位置的元素；
 - removeAt（position）：从链表的特定位置移除一项；
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false；
 - size（）：返回链表包含的元素个数，与数组的length属性类似；
@@ -1009,6 +1009,102 @@ class DoubleLinkList {
         this.tail = null
         this.length = 0
     }
+}
+```
+
+### 1.append(data)
+
+**向尾部添加新节点分为两种情况：**
+
+1. 链表中还没有节点(0节点)
+   - 只需要将head和tail都指向新节点
+2. 链表中已存在节点
+   - 先将新节点的prev指向tail(最后一个节点)
+   - 再将tail(最后一个节点)的next指向新节点
+   - 最后将最后一个节点指向新节点
+   - ![image-20221028144200320](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028144200320.png)
+   - ![](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028144200320.png)
+
+**代码实现**
+
+```js
+// 尾部添加一个节点
+append(data) {
+    // 1.创建节点
+    const newNode = new Node(data)
+    // 2.判断添加的是否是第一个节点
+    if (!this.length) {
+        // 是第一个节点
+        this.head = newNode
+        this.tail = newNode
+    } else {
+        // 先将新节点的prev指向tail(最后一个节点)
+        newNode.prev = this.tail
+        // 再将tail(最后一个节点)的next指向新节点
+        this.tail.next = newNode
+        // 将最后一个节点设置成新节点
+        this.tail = newNode
+    }
+    // 3.长度+1
+    this.length += 1
+}
+```
+
+**测试代码**
+
+```js
+const dbList = new DoubleLinkList()
+dbList.append('aaa')
+dbList.append('bbb')
+dbList.append('ccc')
+console.log(dbList);
+```
+
+![image-20221028144554363](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028144554363.png)
+
+### 2.inster(position, data)
+
+### 3.get(data)
+
+### 4.indexOf(data)
+
+### 5.update(position, data)
+
+### 6.removeAt(position)
+
+### 7.isEmpty()
+
+### 8.size()
+
+### 9.toString()
+
+### 10.forwardString()
+
+```js
+// 返回正向遍历节点字符串形式
+forwardString() {
+    let res = ''
+    let current = this.head
+    while (current) {
+        res += current.data + ' '
+        current = current.next
+    }
+    return res
+}
+```
+
+### 11.backwordString()
+
+```js
+// 返回反向遍历的节点的字符串形式
+backwordString() {
+    let res = ''
+    let current = this.tail
+    while (current) {
+        res += current.data + ' '
+        current = current.prev
+    }
+    return res
 }
 ```
 
