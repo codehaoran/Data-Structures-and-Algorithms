@@ -66,14 +66,60 @@
         }
         return res
       }
+      // 指定位置插入一个节点
+      inster(position, data) {
+        // 1.越界判断
+        if (position < 0 || position > this.length) return false
+
+        // 2.根据data创建新节点
+        const newNode = new Node(data)
+
+        // 3.找到位置并插入
+        let current = this.head
+        let index = 0
+        let prevCurrent = null // 用来记录当前循环的节点的prev
+        // 3.1如果插入的时候链表是一个空链表
+        if (this.length === 0) {
+          this.head = newNode
+          this.tail = newNode
+          // 3.2如果插入的位置是0
+        } else if (position === 0) {
+          // 将当前第一个节点的prev指向新节点
+          current.prev = newNode
+          // 将新节点设置成第一个节点
+          this.head = newNode
+          // 新节点的next指向记录下来的current
+          this.head.next = current
+          // 3.3如果插入的位置最后一个（链表的长度）
+        } else if (position === this.length) {
+          newNode.prev = this.tail
+          this.tail.next = newNode
+          this.tail = newNode
+          // 3.4 插入的位置不是头也不是尾
+        } else {
+          while (current) {
+            if (index === position) {
+              current.prev.next = newNode
+              newNode.prev = current.prev
+              current.prev = newNode
+              newNode.next = current
+              break
+            }
+            index += 1
+            current = current.next
+          }
+        }
+        // 4.长度 +1
+        this.length += 1
+        return newNode
+      }
     }
     const dbList = new DoubleLinkList()
-    dbList.append('aaa')
-    dbList.append('bbb')
-    dbList.append('ccc')
+    dbList.inster(0, 'aaa')
+    dbList.inster(0, 'root')
+    dbList.inster(2, 'bbb')
+    dbList.inster(1, 'root_son')
     console.log(dbList);
-    console.log(dbList.forwardString());
-    console.log(dbList.backwordString());
   </script>
 </body>
 

@@ -1064,6 +1064,94 @@ console.log(dbList);
 
 ### 2.inster(position, data)
 
+**插入一个新节点有多种情况：**
+
+1. 插入的位置为0
+
+   - 分两种情况，一是链表是空，只需要把 head 和 tail 都指向这个新节点
+
+   - 二是链表不为空，把head.prev指向newNode，再将newNode设置为head，当前head.next指向记录的老head
+
+     ![image-20221028165527826](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028165527826.png)
+
+2. 插入的位置是最后一个(position === length)
+
+   - 新节点的prev指向tail，tail.next指向新节点，再把tail重新指向新节点
+
+     ![image-20221028165208013](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028165208013.png)
+
+3. 插入的位置大于0 且 小于 length
+
+   - 循环找到要插入的位置
+     1. current.prev.next = newNode，将newNode设置为当前节点的位置
+     2. newNode.prev = current.prev ， 新节点的prev等于当前节点的prev
+     3. current.prev = newNode，newNode.next = current，这是互相连接
+
+**代码实现**
+
+```js
+// 指定位置插入一个节点
+inster(position, data) {
+    // 1.越界判断
+    if (position < 0 || position > this.length) return false
+
+    // 2.根据data创建新节点
+    const newNode = new Node(data)
+
+    // 3.找到位置并插入
+    let current = this.head
+    let index = 0
+    let prevCurrent = null // 用来记录当前循环的节点的prev
+    // 3.1如果插入的时候链表是一个空链表
+    if (this.length === 0) {
+        this.head = newNode
+        this.tail = newNode
+        // 3.2如果插入的位置是0
+    } else if (position === 0) {
+        // 将当前第一个节点的prev指向新节点
+        current.prev = newNode
+        // 将新节点设置成第一个节点
+        this.head = newNode
+        // 新节点的next指向记录下来的current
+        this.head.next = current
+        // 3.3如果插入的位置最后一个（链表的长度）
+    } else if (position === this.length) {
+        newNode.prev = this.tail
+        this.tail.next = newNode
+        this.tail = newNode
+        // 3.4 插入的位置不是头也不是尾
+    } else {
+        while (current) {
+            if (index === position) {
+                current.prev.next = newNode
+                newNode.prev = current.prev 
+                current.prev = newNode
+                newNode.next = current
+                break
+            }
+            index += 1
+            current = current.next
+        }
+    }
+    // 4.长度 +1
+    this.length += 1
+    return newNode
+}
+```
+
+**代码测试：**
+
+```js
+const dbList = new DoubleLinkList()
+dbList.inster(0, 'aaa')
+dbList.inster(0, 'root')
+dbList.inster(2, 'bbb')
+dbList.inster(1, 'root_son')
+console.log(dbList);
+```
+
+![image-20221028170708962](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028170708962.png)
+
 ### 3.get(data)
 
 ### 4.indexOf(data)
