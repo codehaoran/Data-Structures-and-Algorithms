@@ -113,6 +113,19 @@
         this.length += 1
         return newNode
       }
+      get(position) {
+        if(position < 0 || position > this.length) return null
+        let current = this.head
+        let index = 0
+        while (current) {
+          if(index === position) {
+            return current
+          }
+          index += 1
+          current = current.next
+        }
+        return null
+      }
     }
     const dbList = new DoubleLinkList()
     dbList.insert(0, 'aaa')
@@ -120,6 +133,7 @@
     dbList.insert(2, 'bbb')
     dbList.insert(1, 'root_son')
     console.log(dbList);
+    console.log(dbList.get(1));
   </script>
 </body>
 

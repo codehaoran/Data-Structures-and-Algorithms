@@ -978,7 +978,7 @@ class LinkedList {
 
 - append（data）：向链表尾部添加一个新的项；
 - inset（position，data）：向链表的特定位置插入一个新的项；
-- get（data）：获取对应位置的元素；
+- get（position）：获取对应位置的元素；
 - indexOf（data）：返回元素在链表中的索引，如果链表中没有元素就返回-1；
 - update（position，data）：修改某个位置的元素；
 - removeAt（position）：从链表的特定位置移除一项；
