@@ -487,7 +487,7 @@ console.log(list);
 
 ```js
 // 指定位置插入数据
-inster(position, data) {
+insert(position, data) {
     // 1.对position进行越界判断
     if (position < 0 || position > this.length) return false
 
@@ -530,7 +530,7 @@ const list = new LinkedList()
 list.append('tom-1')
 list.append('jack-2')
 list.append('city-3')
-list.inster(2, 'test')
+list.insert(2, 'test')
 console.log(list);
 ```
 
@@ -1062,7 +1062,7 @@ console.log(dbList);
 
 ![image-20221028144554363](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028144554363.png)
 
-### 2.inster(position, data)
+### 2.**insert**(position, data)
 
 **插入一个新节点有多种情况：**
 
@@ -1091,7 +1091,7 @@ console.log(dbList);
 
 ```js
 // 指定位置插入一个节点
-inster(position, data) {
+insert(position, data) {
     // 1.越界判断
     if (position < 0 || position > this.length) return false
 
@@ -1143,10 +1143,10 @@ inster(position, data) {
 
 ```js
 const dbList = new DoubleLinkList()
-dbList.inster(0, 'aaa')
-dbList.inster(0, 'root')
-dbList.inster(2, 'bbb')
-dbList.inster(1, 'root_son')
+dbList.insert(0, 'aaa')
+dbList.insert(0, 'root')
+dbList.insert(2, 'bbb')
+dbList.insert(1, 'root_son')
 console.log(dbList);
 ```
 

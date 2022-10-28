@@ -67,7 +67,7 @@
         return res
       }
       // 指定位置插入一个节点
-      inster(position, data) {
+      insert(position, data) {
         // 1.越界判断
         if (position < 0 || position > this.length) return false
 
@@ -115,10 +115,10 @@
       }
     }
     const dbList = new DoubleLinkList()
-    dbList.inster(0, 'aaa')
-    dbList.inster(0, 'root')
-    dbList.inster(2, 'bbb')
-    dbList.inster(1, 'root_son')
+    dbList.insert(0, 'aaa')
+    dbList.insert(0, 'root')
+    dbList.insert(2, 'bbb')
+    dbList.insert(1, 'root_son')
     console.log(dbList);
   </script>
 </body>
