@@ -5,6 +5,7 @@
 - [队列结构(Queue)](#队列结构(Queue))
 - [单向链表](#单向链表)
 - [双向链表](#双向链表)
+- [集合结构](#集合结构)
 
 
 
@@ -385,7 +386,7 @@ console.log(qp);
 - 无法通过下标值直接访问元素，需要从头开始一个个访问，直到找到对应的元素
 - 虽然可以轻松地到达**下一个节点**，但是回到**前一个节点**是很难的
 
-**链表中的常见操作：**
+## **链表中的常见操作：**
 
 - append（data）：向链表尾部添加一个新的项
 - insert（position，data）：向链表的特定位置插入一个新的项，返回值为Boolean
@@ -974,7 +975,7 @@ class LinkedList {
 - 双向链表的第一个节点的prev指向**null**；
 - 双向链表的最后一个节点的next指向**null**；
 
-**双向链表常见的操作（方法）：**
+## **双向链表常见的操作（方法）：**
 
 - append（data）：向链表尾部添加一个新的项；
 - inset（position，data）：向链表的特定位置插入一个新的项；
@@ -1064,7 +1065,7 @@ console.log(dbList);
 
 ![image-20221028144554363](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221028144554363.png)
 
-### 2.**insert**(position, data)
+### 2.insert(position, data)
 
 **插入一个新节点有多种情况：**
 
@@ -1649,3 +1650,176 @@ class DoubleLinkList {
 }
 ```
 
+# 集合结构
+
+集合通常是由一组无序的、不能重复的元素构成
+
+- 和数学中的集合名次比较相似，但是数学中的集合范围更大一些，也允许集合中的元素重复
+- 在计算机中，集合通常表示的结构中元素是不允许重复的
+
+也可以把集合看成一种特殊的数组
+
+- 特殊之处就在于里面的元素没有顺序，也不能重复
+- 没有顺序意味着不能通过下标值进行访问，不能重复意味着相同的对象在集合中只会存在一份
+
+在2015年6月份发布的ES6中包含了Set类，可以直接使用它，但是为了明确内部的实现机制，我们还是自己来封装一下这个Set类
+
+## **集合中常见的操作方法：**
+
+- add(value)：向集合添加一个新的项
+- remove(value)：从集合移除一个值
+- has(value)：如果值在集合中，返回true，否则返回false
+- clear()：清空集合中的项
+- size()：返回集合所包含元素的数量，与数组length相似
+- values()：返回一个包含集合中所有值的数组
+
+## 封装集合
+
+### 创建集合类
+
+```js
+// 封装集合类
+class Set {
+    constructor() {
+        // 使用一个对象保存集合的元素
+        this.items = {}
+    }
+}
+```
+
+### 1.add(value)
+
+```js
+// 向集合添加一个新的项 
+add(value) {
+    // 判断集合中是否含有此元素
+    if (this.has(value)) return false
+    // 将元素添加到集合中
+    this.items[value] = value
+
+    return true
+}
+```
+
+### 2.remove(value)
+
+```js
+// 删除一个元素
+remove(value) {
+    // 判断是否含有该元素
+    if (!this.has(value)) return false
+    // 将元素从集合中删除
+    delete this.items[value]
+    return true
+}
+```
+
+### 3.has(value)
+
+```js
+// 判断集合中是否包含此元素
+has(value) {
+    return this.items.hasOwnProperty(value)
+}
+```
+
+### 4.clear()
+
+```js
+// 清空集合
+clear() {
+    this.items = {}
+}
+```
+
+### 5.size()
+
+```js
+// 集合长度
+size() {
+    // Object.keys() 将对象中所以的key转变成数组
+    return Object.keys(this.items).length
+}
+```
+
+### 6.values()
+
+```js
+// 返回一个包含集合中所有值的数组
+values() {
+    return Object.keys(this.items)
+}
+```
+
+## 集合间操作
+
+就是集合与集合之间的操作
+
+- 并集：对于给定的两个集合，返回一个包含两个集合中**所有**元素的集合
+- 交集：对于给定的两个集合，返回一个包含两个集合中**共有**元素的集合
+- 差集：对于给定的两个集合，返回一个包含**所有存在于第一个集合且不存在于第二个集合**的元素的新集合
+- 子集：验证一个给定集合是否是另一集合的子集
+
+![image-20221029202539688](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029202539688.png)
+
+## 并集实现
+
+并集：
+
+- 并集其实对应的就是数学中并集的概念
+
+- 集合A和B的并集，表示为A U *B* ，定义如下
+
+  ![image-20221029210006757](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029210006757.png)
+
+- 意思是*X*(元素)存在于A中，或*x*存在于B中
+
+代码解析：
+
+- 首先需要创建一个新的集合，代表两个集合的交集
+- 遍历集合1中所有的值，并且添加到新集合中
+- 遍历集合2中所有的值，并且添加到新集合中
+- 将最终的新集合返回
+
+**代码实现**
+
+```js
+// 并集
+union(otherSet) {
+    // this:集合对象A
+    // otherSet:集合对象B
+
+    // 1.创建一个新集合
+    const unionSet = new Set()
+
+    // 2.将A集合所以元素添加到辛几何中
+    this.values().forEach(val => {
+        unionSet.add(val)
+    });
+
+    // 3.取出otherSet的values，判断是否加入新集合
+    let values = otherSet.values()
+    values.forEach(val => {
+        // 这里不用判断新集合是否包含val，因为add方法已经做判断
+        unionSet.add(val)
+    })
+    // 4.将并集结果返回
+    return unionSet
+}
+```
+
+**测试**
+
+```js
+const setA = new Set()
+setA.add(1)
+setA.add(2)
+setA.add(3)
+const setB = new Set()
+setB.add('a')
+setB.add('b')
+setB.add('c')
+console.log(setA.union(setB));
+```
+
+![image-20221029212042227](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029212042227.png)

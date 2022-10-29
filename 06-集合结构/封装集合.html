@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>封装集合</title>
+</head>
+
+<body>
+  <script>
+    // 封装集合类
+    class Set {
+      constructor() {
+        // 使用一个对象保存集合的元素
+        this.items = {}
+      }
+
+      // 向集合添加一个新的项 
+      add(value) {
+        // 判断集合中是否含有此元素
+        if (this.has(value)) return false
+        // 将元素添加到集合中
+        this.items[value] = value
+
+        return true
+      }
+      // 判断集合中是否包含此元素
+      has(value) {
+        return this.items.hasOwnProperty(value)
+      }
+      // 删除一个元素
+      remove(value) {
+        // 判断是否含有该元素
+        if (!this.has(value)) return false
+        // 将元素从集合中删除
+        delete this.items[value]
+        return true
+      }
+      // 清空集合
+      clear() {
+        this.items = {}
+      }
+      // 集合长度
+      size() {
+        // Object.keys() 将对象中所以的key转变成数组
+        return Object.keys(this.items).length
+      }
+      // 返回一个包含集合中所有值的数组
+      values() {
+        return Object.keys(this.items)
+      }
+      // 集合间的操作
+      // 并集
+      union(otherSet) {
+        // this:集合对象A
+        // otherSet:集合对象B
+
+        // 1.创建一个新集合
+        const unionSet = new Set()
+
+        // 2.将A集合所以元素添加到辛几何中
+        this.values().forEach(val => {
+          unionSet.add(val)
+        });
+
+        // 3.取出otherSet的values，判断是否加入新集合
+        let values = otherSet.values()
+        values.forEach(val => {
+          // 这里不用判断新集合是否包含val，因为add方法已经做判断
+          unionSet.add(val)
+        })
+        // 4.将并集结果返回
+        return unionSet
+      }
+    }
+
+    const setA = new Set()
+    setA.add(1)
+    setA.add(2)
+    setA.add(3)
+    const setB = new Set()
+    setB.add('a')
+    setB.add('b')
+    setB.add('c')
+    console.log(setA.union(setB));
+  </script>
+</body>
+
+</html>
