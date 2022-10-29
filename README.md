@@ -984,6 +984,7 @@ class LinkedList {
 - removeAt（position）：从链表的特定位置移除一项；
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false；
 - size（）：返回链表包含的元素个数，与数组的length属性类似；
+
 - toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值；
 - forwardString（）：返回正向遍历节点字符串形式；
 - backwordString（）：返回反向遍历的节点的字符串形式；
@@ -1154,9 +1155,145 @@ console.log(dbList);
 
 ### 3.get(data)
 
+**代码实现**
+
+```js
+// 获取对应位置的元素
+get(position) {
+    if (position < 0 || position > this.length) return null
+    let current = this.head
+    let index = 0
+    while (current) {
+        if (index === position) {
+            return current
+        }
+        index += 1
+        current = current.next
+    }
+    return null
+}
+```
+
+如果考虑到性能，当节点过多，从head开始循环貌似不是最优的办法，如果节点很多，我们要找的节点又靠后呢？那将浪费很多性能，解决办法就是判断position的位置距离head和tail哪个近，就从那边循环
+
+- position < this.length / 2，从head开始遍历
+- position > this.length / 2，从tail开始遍历
+
+**优化后的代码：**
+
+```js
+// 获取对应位置的元素
+get(position) {
+    if (position < 0 || position > this.length) return null
+    if (position < this.length / 2) {
+        let index = 0
+        let current = this.head
+        while (current) {
+            if (index === position) {
+                return current
+            }
+            index += 1
+            current = current.next
+        }
+    }else {
+        let current = this.tail
+        let index = this.length - 1
+        while (current) {
+            if (index === position) {
+                return current
+            }
+            index -= 1
+            current = current.prev
+        }
+    }
+    return null
+}
+```
+
+**测试代码**
+
+```js
+const dbList = new DoubleLinkList()
+dbList.insert(0, 'aaa')
+dbList.insert(0, 'root')
+dbList.insert(2, 'bbb')
+dbList.insert(1, 'root_son')
+console.log(dbList);
+console.log(dbList.get(3));
+```
+
+![image-20221029131115921](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029131115921.png)
+
 ### 4.indexOf(data)
 
+```js
+// 返回元素在链表中的索引
+indexOf(data) {
+    let index = 0
+    let current = this.head
+    while (current) {
+        if (current.data === data) {
+            return index
+        }
+        current = current.next
+        index += 1
+    }
+    return -1
+}
+```
+
+
+
 ### 5.update(position, data)
+
+**实现代码**
+
+```js
+// 修改某个位置的元素
+update(position, data) {
+    // 越界判断
+    if (position < 0 || position > this.length - 1) return false
+    // 判断position位置距离head和tail哪个近
+    if (position < this.length / 2) {
+        let index = 0
+        let current = this.head
+        while (current) {
+            if (index === position) {
+                current.data = data
+                return true
+            }
+            index += 1
+            current = current.next
+        }
+    } else {
+        let index = this.length - 1
+        let current = this.tail
+        while (current) {
+            if (index === position) {
+                current.data = data
+                return true
+            }
+            index -= 1
+            current = current.prev
+        }
+    }
+}
+```
+
+**测试代码**
+
+```js
+const dbList = new DoubleLinkList()
+dbList.insert(0, 'root')
+dbList.insert(1, 'root_son')
+dbList.insert(2, 'aaa')
+dbList.insert(3, 'bbb')
+console.log(dbList.update(0, 'root-update')); 
+console.log(dbList.update(3, 'bbb-update')); 
+console.log(dbList);
+```
+
+![image-20221029141437871](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029141437871.png)
 
 ### 6.removeAt(position)
 

@@ -113,27 +113,83 @@
         this.length += 1
         return newNode
       }
+      // 获取对应位置的元素
       get(position) {
-        if(position < 0 || position > this.length) return null
-        let current = this.head
-        let index = 0
-        while (current) {
-          if(index === position) {
-            return current
+        if (position < 0 || position > this.length) return null
+        if (position < this.length / 2) {
+          let index = 0
+          let current = this.head
+          while (current) {
+            if (index === position) {
+              return current
+            }
+            index += 1
+            current = current.next
           }
-          index += 1
-          current = current.next
+        } else {
+          let current = this.tail
+          let index = this.length - 1
+          while (current) {
+            if (index === position) {
+              return current
+            }
+            index -= 1
+            current = current.prev
+          }
         }
         return null
       }
+      // 返回元素在链表中的索引
+      indexOf(data) {
+        let index = 0
+        let current = this.head
+        while (current) {
+          if (current.data === data) {
+            return index
+          }
+          current = current.next
+          index += 1
+        }
+        return -1
+      }
+      // 修改某个位置的元素
+      update(position, data) {
+        // 越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 判断position位置距离head和tail哪个近
+        if (position < this.length / 2) {
+          let index = 0
+          let current = this.head
+          while (current) {
+            if (index === position) {
+              current.data = data
+              return true
+            }
+            index += 1
+            current = current.next
+          }
+        } else {
+          let index = this.length - 1
+          let current = this.tail
+          while (current) {
+            if (index === position) {
+              current.data = data
+              return true
+            }
+            index -= 1
+            current = current.prev
+          }
+        }
+      }
     }
     const dbList = new DoubleLinkList()
-    dbList.insert(0, 'aaa')
     dbList.insert(0, 'root')
-    dbList.insert(2, 'bbb')
     dbList.insert(1, 'root_son')
+    dbList.insert(2, 'aaa')
+    dbList.insert(3, 'bbb')
+    console.log(dbList.update(0, 'root-update')); 
+    console.log(dbList.update(3, 'bbb-update')); 
     console.log(dbList);
-    console.log(dbList.get(1));
   </script>
 </body>
 
