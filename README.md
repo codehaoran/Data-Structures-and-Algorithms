@@ -1412,3 +1412,228 @@ backwordString() {
     return res
 }
 ```
+
+### 整体代码
+
+```js
+// 节点类
+class Node {
+    constructor(data) {
+        this.data = data
+        this.prev = null
+        this.next = null
+    }
+}
+// 封装双向链表类
+class DoubleLinkList {
+    constructor() {
+        // 属性
+        this.head = null
+        this.tail = null
+        this.length = 0
+    }
+    // 尾部添加一个节点
+    append(data) {
+        // 1.创建节点
+        const newNode = new Node(data)
+        // 2.判断添加的是否是第一个节点
+        if (!this.length) {
+            // 是第一个节点
+            this.head = newNode
+            this.tail = newNode
+        } else {
+            // 先将新节点的prev指向tail(最后一个节点)
+            newNode.prev = this.tail
+            // 再将tail(最后一个节点)的next指向新节点
+            this.tail.next = newNode
+            // 将最后一个节点设置成新节点
+            this.tail = newNode
+        }
+        // 3.长度+1
+        this.length += 1
+    }
+    // 返回正向遍历节点字符串形式
+    forwardString() {
+        let res = ''
+        let current = this.head
+        while (current) {
+            res += current.data + ' '
+            current = current.next
+        }
+        return res
+    }
+    // 返回反向遍历的节点的字符串形式
+    backwordString() {
+        let res = ''
+        let current = this.tail
+        while (current) {
+            res += current.data + ' '
+            current = current.prev
+        }
+        return res
+    }
+    // 指定位置插入一个节点
+    insert(position, data) {
+        // 1.越界判断
+        if (position < 0 || position > this.length) return false
+
+        // 2.根据data创建新节点
+        const newNode = new Node(data)
+
+        // 3.找到位置并插入
+        let current = this.head
+        let index = 0
+        let prevCurrent = null // 用来记录当前循环的节点的prev
+        // 3.1如果插入的时候链表是一个空链表
+        if (this.length === 0) {
+            this.head = newNode
+            this.tail = newNode
+            // 3.2如果插入的位置是0
+        } else if (position === 0) {
+            // 将当前第一个节点的prev指向新节点
+            current.prev = newNode
+            // 将新节点设置成第一个节点
+            this.head = newNode
+            // 新节点的next指向记录下来的current
+            this.head.next = current
+            // 3.3如果插入的位置最后一个（链表的长度）
+        } else if (position === this.length) {
+            newNode.prev = this.tail
+            this.tail.next = newNode
+            this.tail = newNode
+            // 3.4 插入的位置不是头也不是尾
+        } else {
+            while (current) {
+                if (index === position) {
+                    current.prev.next = newNode
+                    newNode.prev = current.prev
+                    current.prev = newNode
+                    newNode.next = current
+                    break
+                }
+                index += 1
+                current = current.next
+            }
+        }
+        // 4.长度 +1
+        this.length += 1
+        return newNode
+    }
+    // 获取对应位置的元素
+    get(position) {
+        if (position < 0 || position > this.length) return null
+        if (position < this.length / 2) {
+            let index = 0
+            let current = this.head
+            while (current) {
+                if (index === position) {
+                    return current
+                }
+                index += 1
+                current = current.next
+            }
+        } else {
+            let current = this.tail
+            let index = this.length - 1
+            while (current) {
+                if (index === position) {
+                    return current
+                }
+                index -= 1
+                current = current.prev
+            }
+        }
+        return null
+    }
+    // 返回元素在链表中的索引
+    indexOf(data) {
+        let index = 0
+        let current = this.head
+        while (current) {
+            if (current.data === data) {
+                return index
+            }
+            current = current.next
+            index += 1
+        }
+        return -1
+    }
+    // 修改某个位置的元素
+    update(position, data) {
+        // 越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 判断position位置距离head和tail哪个近
+        if (position < this.length / 2) {
+            let index = 0
+            let current = this.head
+            while (current) {
+                if (index === position) {
+                    current.data = data
+                    return true
+                }
+                index += 1
+                current = current.next
+            }
+        } else {
+            let index = this.length - 1
+            let current = this.tail
+            while (current) {
+                if (index === position) {
+                    current.data = data
+                    return true
+                }
+                index -= 1
+                current = current.prev
+            }
+        }
+    }
+    // 从链表的特定位置移除一项
+    removeAt(position) {
+        // 越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 四种情况：1.length===1。 2.移除的是第一个，3.移除的是最后一个，4.非第一个和最后一个
+        // 如果length===1
+        if (this.length === 1) {
+            this.head = null
+            this.tail = null
+            //移除的是第一个
+        } else if (position === 0) {
+            this.head = this.head.next
+            this.head.prev = null
+            // 移除的是最后一个
+        } else if (position === this.length - 1) {
+            this.tail = this.tail.prev
+            this.tail.next = null
+        } else {
+            // 移除的是中间的
+            let index = 0
+            let current = this.head
+            while (current) {
+                if(index === position) {
+                    current.next.prev = current.prev
+                    current.prev.next = current.next
+                }
+                index += 1
+                current = current.next
+            }
+        }
+        // 长度改变 -1
+        this.length -= 1
+        return true
+    }
+    // 链表中包不包含任何元素
+    isEmpty() {
+        return !!this.length
+    }
+    // 返回链表包含的元素个数
+    size() {
+        return this.length
+    }
+    // 输出链表中字符串的值，参数: 1：正向，-1：反向
+    toString(data) {
+        if(data === 1) return this.forwardString()
+        if(data === -1) return this.backwordString()
+    }
+}
+```
+
