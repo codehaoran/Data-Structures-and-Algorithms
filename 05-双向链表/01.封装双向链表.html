@@ -181,15 +181,61 @@
           }
         }
       }
+      // 从链表的特定位置移除一项
+      removeAt(position) {
+        // 越界判断
+        if (position < 0 || position > this.length - 1) return false
+        // 四种情况：1.length===1。 2.移除的是第一个，3.移除的是最后一个，4.非第一个和最后一个
+        // 如果length===1
+        if (this.length === 1) {
+          this.head = null
+          this.tail = null
+          //移除的是第一个
+        } else if (position === 0) {
+          this.head = this.head.next
+          this.head.prev = null
+          // 移除的是最后一个
+        } else if (position === this.length - 1) {
+          this.tail = this.tail.prev
+          this.tail.next = null
+        } else {
+          // 移除的是中间的
+          let index = 0
+          let current = this.head
+          while (current) {
+            if(index === position) {
+              current.next.prev = current.prev
+              current.prev.next = current.next
+            }
+            index += 1
+            current = current.next
+          }
+        }
+        // 长度改变 -1
+        this.length -= 1
+        return true
+      }
+      // 链表中包不包含任何元素
+      isEmpty() {
+        return !!this.length
+      }
+      // 返回链表包含的元素个数
+      size() {
+        return this.length
+      }
+      // 输出链表中字符串的值，参数: 1：正向，-1：反向
+      toString(data) {
+        if(data === 1) return this.forwardString()
+        if(data === -1) return this.backwordString()
+      }
     }
     const dbList = new DoubleLinkList()
-    dbList.insert(0, 'root')
-    dbList.insert(1, 'root_son')
-    dbList.insert(2, 'aaa')
-    dbList.insert(3, 'bbb')
-    console.log(dbList.update(0, 'root-update')); 
-    console.log(dbList.update(3, 'bbb-update')); 
-    console.log(dbList);
+    dbList.insert(0, 'AAA')
+    dbList.insert(1, 'BBB')
+    dbList.insert(2, 'CCC')
+    dbList.insert(3, 'DDD')
+    // dbList.removeAt(1)
+    console.log(dbList.toString(-1));
   </script>
 </body>
 

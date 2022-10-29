@@ -985,7 +985,7 @@ class LinkedList {
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false；
 - size（）：返回链表包含的元素个数，与数组的length属性类似；
 
-- toString（）：由于链表项使用了Node类，就需要重写继承自JavaScript对象默认的toString方法，让其只输出元素的值；
+- toString（data）：输出链表中字符串的值，参数: 1：正向，-1：反向
 - forwardString（）：返回正向遍历节点字符串形式；
 - backwordString（）：返回反向遍历的节点的字符串形式；
 
@@ -1242,8 +1242,6 @@ indexOf(data) {
 }
 ```
 
-
-
 ### 5.update(position, data)
 
 **实现代码**
@@ -1297,11 +1295,93 @@ console.log(dbList);
 
 ### 6.removeAt(position)
 
+**删除一个节点有四种情况：**
+
+1. 只有一个节点的时候，需要把head、tail指向null
+2. 删除第一个节点，head指向this.head.next，再把新head的prev指向null
+3. 删除最后一个节点，tail指向this.tail.prev，再把新tail的next指向null
+4. 删除中间的节点，current.prev.next指向current.next，current.next.prev = current.prev。互相指向，跳过current
+
+**实现代码**
+
+```js
+// 从链表的特定位置移除一项
+removeAt(position) {
+    // 越界判断
+    if (position < 0 || position > this.length - 1) return false
+    // 四种情况：1.length===1。 2.移除的是第一个，3.移除的是最后一个，4.非第一个和最后一个
+    // 如果length===1
+    if (this.length === 1) {
+        this.head = null
+        this.tail = null
+        //移除的是第一个
+    } else if (position === 0) {
+        this.head = this.head.next
+        this.head.prev = null
+        // 移除的是最后一个
+    } else if (position === this.length - 1) {
+        this.tail = this.tail.prev
+        this.tail.next = null
+    } else {
+        // 移除的是中间的
+        let index = 0
+        let current = this.head
+        while (current) {
+            if(index === position) {
+                current.next.prev = current.prev
+                current.prev.next = current.next
+            }
+            index += 1
+            current = current.next
+        }
+    }
+    // 长度改变 -1
+    this.length -= 1
+    return true
+}
+```
+
+**测试代码**
+
+```js
+const dbList = new DoubleLinkList()
+dbList.insert(0, 'AAA')
+dbList.insert(1, 'BBB')
+dbList.insert(2, 'CCC')
+dbList.insert(3, 'DDD')
+dbList.removeAt(1)
+console.log(dbList);
+```
+
+![image-20221029150445120](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029150445120.png)
+
 ### 7.isEmpty()
+
+```js
+// 链表中包不包含任何元素
+isEmpty() {
+    return !!this.length
+}
+```
 
 ### 8.size()
 
+```js
+// 返回链表包含的元素个数
+size() {
+    return this.length
+}
+```
+
 ### 9.toString()
+
+```js
+// 输出链表中字符串的值，参数: 1：正向，-1：反向
+toString(data) {
+    if(data === 1) return this.forwardString()
+    if(data === -1) return this.backwordString()
+}
+```
 
 ### 10.forwardString()
 
