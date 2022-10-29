@@ -215,6 +215,10 @@
         this.length -= 1
         return true
       }
+      // remover 从链表中移除指定数据
+      remove(data) {
+        return this.removeAt(this.indexOf(data))
+      }
       // 链表中包不包含任何元素
       isEmpty() {
         return !!this.length
@@ -235,7 +239,8 @@
     dbList.insert(2, 'CCC')
     dbList.insert(3, 'DDD')
     // dbList.removeAt(1)
-    console.log(dbList.toString(-1));
+    console.log(dbList.remove('AAA'));
+    console.log(dbList);
   </script>
 </body>
 

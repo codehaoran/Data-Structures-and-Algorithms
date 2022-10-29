@@ -982,6 +982,7 @@ class LinkedList {
 - indexOf（data）：返回元素在链表中的索引，如果链表中没有元素就返回-1；
 - update（position，data）：修改某个位置的元素；
 - removeAt（position）：从链表的特定位置移除一项；
+- remover(data)：从链表中移除指定数据
 - isEmpty（）：如果链表中不包含任何元素，返回trun，如果链表长度大于0则返回false；
 - size（）：返回链表包含的元素个数，与数组的length属性类似；
 
@@ -1355,7 +1356,18 @@ console.log(dbList);
 
 ![image-20221029150445120](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029150445120.png)
 
-### 7.isEmpty()
+### 7.remove(data) 
+
+```js
+// remover 从链表中移除指定数据
+remove(data) {
+    return this.removeAt(this.indexOf(data))
+}
+```
+
+
+
+### 8.isEmpty()
 
 ```js
 // 链表中包不包含任何元素
@@ -1364,7 +1376,7 @@ isEmpty() {
 }
 ```
 
-### 8.size()
+### 9.size()
 
 ```js
 // 返回链表包含的元素个数
@@ -1373,7 +1385,7 @@ size() {
 }
 ```
 
-### 9.toString()
+### 10.toString()
 
 ```js
 // 输出链表中字符串的值，参数: 1：正向，-1：反向
@@ -1383,7 +1395,7 @@ toString(data) {
 }
 ```
 
-### 10.forwardString()
+### 11.forwardString()
 
 ```js
 // 返回正向遍历节点字符串形式
@@ -1398,7 +1410,7 @@ forwardString() {
 }
 ```
 
-### 11.backwordString()
+### 12.backwordString()
 
 ```js
 // 返回反向遍历的节点的字符串形式
