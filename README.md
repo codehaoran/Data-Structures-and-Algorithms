@@ -1762,7 +1762,9 @@ values() {
 
 ![image-20221029202539688](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029202539688.png)
 
-## 并集实现
+### 并集实现
+
+就是两个集合合并成一个新的集合
 
 并集：
 
@@ -1823,3 +1825,176 @@ console.log(setA.union(setB));
 ```
 
 ![image-20221029212042227](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221029212042227.png)
+
+### 交集实现
+
+交集就是两个集合中重复的元素
+
+交集：
+
+- 交集其实对应的就是数学中交集的概念
+- 集合A和B的交集，表示为A ∩ *B*，定义如下
+
+​							![image-20221030095510306](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221030095510306.png)
+
+- 意思是x(元素)存在于A中，且X存在于B中
+
+代码解析：
+
+- 创建一个新集合
+- 遍历集合1中所有的元素，判断该元素是否在集合2中
+- 如果在集合2中，将该元素加入到新集合中
+- 将最终的新集合返回
+
+**代码实现**
+
+```js
+// 交集
+intersection(otherSet) {
+    // this:集合对象A
+    // otherSet:集合对象B
+
+    // 1.创建一个新集合
+    const newSet = new Set()
+
+    // 2.遍历集合A
+    this.values().forEach(val => {
+        // 3.判断元素是否存在于集合B，如果存在，将该元素加入到新集合
+        if (otherSet.has(val)) {
+            newSet.add(val)
+        }
+    })
+    // 4.最终返回新集合
+    return newSet
+}
+```
+
+**测试**
+
+```js
+const setA = new Set()
+setA.add(1)
+setA.add(2)
+setA.add(3)
+const setB = new Set()
+setB.add('a')
+setB.add('b')
+setB.add('c')
+setB.add(3)
+console.log(setA.intersection(setB));
+```
+
+![image-20221030105355431](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221030105355431.png)
+
+### 差集实现
+
+集合A中的元素集合B没有包含，将没有包含的元素加入到新集合
+
+差集
+
+- 差集其实对应的就是数学中差集的概念
+- 集合A和B的差集，表示为A -*B*，定义如下
+
+![image-20221030105506641](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221030105506641.png)
+
+- 意思是x(元素)存在于A中，且x不存在B中
+
+代码解析
+
+- 创建一个新的集合
+- 遍历集合1中所有的元素，判断元素是否在集合2中
+- 不存在集合2中，将该元素添加到新集合中
+- 将新集合返回
+
+**代码实现**
+
+```js
+// 差集
+differenceSet(otherSet) {
+    // this:集合对象A
+    // otherSet:集合对象B
+
+    // 1.创建一个新集合
+    const newSet = new Set()
+
+    // 2.遍历集合A,判断元素是否在集合B中
+    this.values().forEach(val => {
+        if (!otherSet.has(val)) {
+            newSet.add(val)
+        }
+    })
+    // 3.返回新集合
+    return newSet
+}
+```
+
+**代码测试**
+
+```js
+const setA = new Set()
+setA.add(1)
+setA.add(2)
+setA.add(3)
+const setB = new Set()
+setB.add('a')
+setB.add('b')
+setB.add('c')
+setB.add(3)
+console.log(setA.differenceSet(setB));
+```
+
+![image-20221030171658010](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221030171658010.png)
+
+### 子集实现
+
+子集：
+
+- 子集其实对应的就是数学中子集的概念
+- 集合A是B的子集（或集合B包含了A），表示为A⊆B，定义如下
+
+![image-20221030111441219](https://haoran-img.oss-cn-hangzhou.aliyuncs.com/typora_img/image-20221030111441219.png)
+
+- 意思是集合A中的每一个X（元素），也需要存在于B中
+
+代码解析：
+
+- 遍历集合1中所有的元素，判断元素是否在集合2中
+- 如果集合1中的每一个元素集合2都存在，那么集合1就是集合2的子集
+
+**代码实现**
+
+```js
+// 子集
+subSet(otherSet) {
+    // this:集合对象A
+    // otherSet:集合对象B
+    // 1.循环集合A，查看集合B中是否含有集合A的元素
+    for (let i = 0; i < this.values().length; i++) {
+        const val = this.values()[i];
+        if (!otherSet.has(val)) {
+            // 2.如果有一个元素集合B没有，那么不是子集，返回false
+            return false
+        }
+    }
+    // 通过循环说明集合A中的元素都在集合B里包含，返回true
+    return true
+}
+```
+
+**代码测试**
+
+```js
+const setA = new Set()
+setA.add(1)
+setA.add(2)
+setA.add(3)
+const setB = new Set()
+setB.add('a')
+setB.add('b')
+setB.add('c')
+setB.add(3)
+setB.add(2)
+setB.add(1)
+console.log(setA.subSet(setB)); // true
+```
+

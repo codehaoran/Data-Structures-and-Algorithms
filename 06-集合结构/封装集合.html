@@ -74,6 +74,56 @@
         // 4.将并集结果返回
         return unionSet
       }
+      // 交集
+      intersection(otherSet) {
+        // this:集合对象A
+        // otherSet:集合对象B
+
+        // 1.创建一个新集合
+        const newSet = new Set()
+
+        // 2.遍历集合A
+        this.values().forEach(val => {
+          // 3.判断元素是否存在于集合B，如果存在，将该元素加入到新集合
+          if (otherSet.has(val)) {
+            newSet.add(val)
+          }
+        })
+        // 4.最终返回新集合
+        return newSet
+      }
+      // 差集
+      differenceSet(otherSet) {
+        // this:集合对象A
+        // otherSet:集合对象B
+
+        // 1.创建一个新集合
+        const newSet = new Set()
+
+        // 2.遍历集合A,判断元素是否在集合B中
+        this.values().forEach(val => {
+          if (!otherSet.has(val)) {
+            newSet.add(val)
+          }
+        })
+        // 3.返回新集合
+        return newSet
+      }
+      // 子集
+      subSet(otherSet) {
+        // this:集合对象A
+        // otherSet:集合对象B
+        // 1.循环集合A，查看集合B中是否含有集合A的元素
+        for (let i = 0; i < this.values().length; i++) {
+          const val = this.values()[i];
+          if (!otherSet.has(val)) {
+            // 2.如果有一个元素集合B没有，那么不是子集，返回false
+            return false
+          }
+        }
+        // 通过循环说明集合A中的元素都在集合B里包含，返回true
+        return true
+      }
     }
 
     const setA = new Set()
@@ -84,7 +134,10 @@
     setB.add('a')
     setB.add('b')
     setB.add('c')
-    console.log(setA.union(setB));
+    setB.add(3)
+    setB.add(2)
+    setB.add(1)
+    console.log(setA.subSet(setB));
   </script>
 </body>
 
